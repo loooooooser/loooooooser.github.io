@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -334,59 +334,6 @@
             background: linear-gradient(to bottom, #ffdd00 0%, #ffaa00 100%);
         }
 
-        .related-videos {
-            list-style: none;
-        }
-
-        .related-video {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #e5e5e5;
-        }
-
-        .related-video:last-child {
-            border-bottom: none;
-        }
-
-        .related-thumb {
-            width: 130px;
-            height: 97px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            flex-shrink: 0;
-            border: 1px solid #999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 11px;
-            text-align: center;
-            padding: 5px;
-        }
-
-        .related-info {
-            flex: 1;
-        }
-
-        .related-title {
-            font-weight: bold;
-            font-size: 12px;
-            color: #0033cc;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .related-title:hover {
-            text-decoration: underline;
-        }
-
-        .related-meta {
-            font-size: 11px;
-            color: #666;
-        }
-
         /* Commands Section */
         .commands-box {
             background: #ffffcc;
@@ -448,21 +395,21 @@
     <div class="youtube-header">
         <div class="header-top">
             <a href="#" class="youtube-logo">
-                <img src="https://raw.githubusercontent.com/loooooooser/loooooooser.github.io/main/assets/Logo_of_YouTube_(2006-2011).svg.png" alt="YouTube" style="height: 35px;">
+                <img src="https://raw.githubusercontent.com/loooooooser/loooooooser.github.io/main/assets/Logo_of_YouTube_(2006-2011).svg.png" alt="YouTube">
                 <span class="tagline">Broadcast Yourself™</span>
             </a>
             
             <div class="header-search">
                 <div class="search-box">
-                    <input type="text" placeholder="Search">
-                    <button>Search</button>
+                    <input type="text" placeholder="Hledat" id="searchInput">
+                    <button id="searchBtn">Hledat</button>
                 </div>
             </div>
             
             <div class="header-links">
-                <a href="#">Sign Up</a>
-                <a href="#">Log In</a>
-                <a href="#">Help</a>
+                <a href="#">Registrace</a>
+                <a href="#">Přihlášení</a>
+                <a href="#">Nápověda</a>
             </div>
         </div>
     </div>
@@ -470,11 +417,11 @@
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
         <ul>
-            <li class="active">Videos</li>
-            <li>Favorites</li>
-            <li>Playlists</li>
-            <li>Channels</li>
-            <li>Community</li>
+            <li class="active">Videa</li>
+            <li>Oblíbené</li>
+            <li>Playlisty</li>
+            <li>Kanály</li>
+            <li>Komunita</li>
         </ul>
     </div>
 
@@ -484,19 +431,19 @@
         <div class="left-column">
             <div class="video-area">
                 <div class="play-button"></div>
-                <div class="video-overlay">Click to view my portfolio</div>
+                <div class="video-overlay" id="videoOverlay">Klikněte pro zobrazení mého portfolia</div>
             </div>
 
             <div class="video-info">
-                <h1 class="video-title">Welcome to My Developer Portfolio - Full Stack Developer</h1>
+                <h1 class="video-title" id="videoTitle">Vítejte v mém vývojářském portfoliu - Full Stack Developer</h1>
                 
-                <div class="video-stats">
+                <div class="video-stats" id="videoStats">
                     <div>
-                        <strong>5,234</strong> views | 
-                        Added: <strong>January 2026</strong>
+                        <strong>5,234</strong> <span id="viewsText">zobrazení</span> | 
+                        <span id="addedText">Přidáno</span>: <strong>leden 2026</strong>
                     </div>
                     <div>
-                        <strong>★★★★★</strong> (98% liked it)
+                        <strong>★★★★★</strong> (98% <span id="likedText">se líbilo</span>)
                     </div>
                 </div>
 
@@ -504,29 +451,29 @@
                     <div class="rating-fill"></div>
                 </div>
 
-                <div class="video-description">
-                    <p><strong>About Me</strong></p>
-                    <p>
-                        Hi! I'm a full-stack developer with 5+ years of experience building 
-                        scalable web applications. I specialize in modern JavaScript frameworks, cloud 
-                        architecture, and creating delightful user experiences.
+                <div class="video-description" id="videoDescription">
+                    <p><strong id="aboutTitle">O mně</strong></p>
+                    <p id="aboutText1">
+                        Ahoj! Jsem nadšený full-stack vývojář s 5+ lety zkušeností v budování škálovatelných 
+                        webových aplikací. Specializuji se na moderní JavaScript frameworky, cloudovou 
+                        architekturu a vytváření příjemných uživatelských zkušeností.
                     </p>
-                    <p style="margin-top: 10px;">
-                        I love solving complex problems with elegant code and collaborating with teams 
-                        to build products that make a real impact. When I'm not coding, you can find 
-                        me contributing to open source or exploring new technologies.
+                    <p style="margin-top: 10px;" id="aboutText2">
+                        Miluji řešení složitých problémů elegantním kódem a spolupráci s týmy na budování 
+                        produktů, které mají skutečný dopad. Když zrovna nekóduji, můžete mě najít, jak 
+                        přispívám do open source nebo zkoumám nové technologie.
                     </p>
                     
-                    <p style="margin-top: 15px;"><strong>What I Do</strong></p>
-                    <p>
-                        • Full-stack web development (React, Node.js, TypeScript)<br>
-                        • Cloud infrastructure & DevOps (AWS, Docker, Kubernetes)<br>
-                        • System design & architecture<br>
-                        • Open source contributions<br>
-                        • Technical mentoring & code reviews
+                    <p style="margin-top: 15px;"><strong id="whatIDoTitle">Co dělám</strong></p>
+                    <p id="whatIDoText">
+                        • Full-stack webový vývoj (React, Node.js, TypeScript)<br>
+                        • Cloudová infrastruktura & DevOps (AWS, Docker, Kubernetes)<br>
+                        • Návrh systémů & architektura<br>
+                        • Příspěvky do open source<br>
+                        • Technické mentorství & code review
                     </p>
 
-                    <p style="margin-top: 15px;"><strong>Get in Touch</strong></p>
+                    <p style="margin-top: 15px;"><strong id="contactTitle">Kontaktujte mě</strong></p>
                     <p>
                         Email: j__@outlook.cz<br>
                         GitHub: github.com/loooooooser<br>
@@ -534,7 +481,7 @@
                 </div>
 
                 <div class="video-tags">
-                    <span style="font-size: 11px; color: #666; margin-right: 5px;">Tags:</span>
+                    <span style="font-size: 11px; color: #666; margin-right: 5px;" id="tagsLabel">Tagy:</span>
                     <a href="#" class="tag">JavaScript</a>
                     <a href="#" class="tag">TypeScript</a>
                     <a href="#" class="tag">React</a>
@@ -543,8 +490,8 @@
                     <a href="#" class="tag">AWS</a>
                     <a href="#" class="tag">Docker</a>
                     <a href="#" class="tag">Full-Stack</a>
-                    <a href="#" class="tag">Web Development</a>
-                    <a href="#" class="tag">Software Engineer</a>
+                    <a href="#" class="tag">Webový vývoj</a>
+                    <a href="#" class="tag">Softwarový inženýr</a>
                 </div>
             </div>
         </div>
@@ -553,60 +500,63 @@
         <div class="sidebar">
             <!-- Commands Box -->
             <div class="commands-box">
-                <div style="font-weight: bold; margin-bottom: 8px; color: #c00;">⚡ QUICK COMMANDS</div>
+                <div style="font-weight: bold; margin-bottom: 8px; color: #c00;" id="commandsTitle">⚡ RYCHLÉ PŘÍKAZY</div>
                 <div class="command-item">
-                    <span class="command-label">TYPE:</span> /languages
+                    <span class="command-label" id="cmdLabel1">PIŠTĚ:</span> <span id="cmd1">/jazyky</span>
                 </div>
                 <div class="command-item">
-                    <span class="command-label">TYPE:</span> /about
+                    <span class="command-label" id="cmdLabel2">PIŠTĚ:</span> <span id="cmd2">/omne</span>
                 </div>
                 <div class="command-item">
-                    <span class="command-label">TYPE:</span> /skills
+                    <span class="command-label" id="cmdLabel3">PIŠTĚ:</span> <span id="cmd3">/dovednosti</span>
                 </div>
                 <div class="command-item">
-                    <span class="command-label">TYPE:</span> /projects
+                    <span class="command-label" id="cmdLabel4">PIŠTĚ:</span> <span id="cmd4">/projekty</span>
                 </div>
                 <div class="command-item">
-                    <span class="command-label">TYPE:</span> /contact
+                    <span class="command-label" id="cmdLabel5">PIŠTĚ:</span> <span id="cmd5">/kontakt</span>
                 </div>
-                <div style="margin-top: 10px; font-size: 10px; color: #666;">
-                    Click search box above and type these commands!
+                <div class="command-item">
+                    <span class="command-label" id="cmdLabel6">PIŠTĚ:</span> <span id="cmd6">/translate</span>
+                </div>
+                <div style="margin-top: 10px; font-size: 10px; color: #666;" id="commandHint">
+                    Klikněte na vyhledávací pole výše a zadejte tyto příkazy!
                 </div>
             </div>
 
             <!-- Channel Info -->
             <div class="sidebar-box">
-                <div class="sidebar-title">From:</div>
+                <div class="sidebar-title" id="channelFrom">Od:</div>
                 <div class="channel-info">
                     <div class="channel-avatar">J</div>
                     <div class="channel-details">
                         <a href="#" class="channel-name">Joseph</a>
                         <div style="color: #666; font-size: 11px; margin: 5px 0;">
-                            Software Engineer<br>
-                            Member since 2020
+                            <span id="channelRole">Softwarový inženýr</span><br>
+                            <span id="channelMember">Člen od 2020</span>
                         </div>
-                        <button class="subscribe-btn">Subscribe</button>
+                        <button class="subscribe-btn" id="subscribeBtn">Odebírat</button>
                     </div>
                 </div>
             </div>
 
             <!-- More Info -->
             <div class="sidebar-box">
-                <div class="sidebar-title">Tech Stack</div>
-                <div style="line-height: 1.8;">
-                    <strong>Languages:</strong><br>
+                <div class="sidebar-title" id="techStackTitle">Technologie</div>
+                <div style="line-height: 1.8;" id="techStackContent">
+                    <strong id="langTitle">Jazyky:</strong><br>
                     JavaScript, TypeScript, Python, Go, SQL<br><br>
                     
-                    <strong>Frontend:</strong><br>
+                    <strong id="frontendTitle">Frontend:</strong><br>
                     React, Vue.js, Next.js, Tailwind CSS<br><br>
                     
-                    <strong>Backend:</strong><br>
+                    <strong id="backendTitle">Backend:</strong><br>
                     Node.js, Express, Django, FastAPI<br><br>
                     
-                    <strong>Database:</strong><br>
+                    <strong id="databaseTitle">Databáze:</strong><br>
                     PostgreSQL, MongoDB, Redis<br><br>
                     
-                    <strong>Cloud & DevOps:</strong><br>
+                    <strong id="cloudTitle">Cloud & DevOps:</strong><br>
                     AWS, Docker, Kubernetes, CI/CD
                 </div>
             </div>
@@ -616,37 +566,179 @@
     <!-- Footer -->
     <div class="youtube-footer">
         <div class="footer-links">
-            <a href="#">About</a>
-            <a href="#">Press & Blogs</a>
-            <a href="#">Copyright</a>
-            <a href="#">Creators & Partners</a>
-            <a href="#">Advertising</a>
-            <a href="#">Developers</a>
-            <a href="#">Terms</a>
-            <a href="#">Privacy</a>
-            <a href="#">Safety</a>
+            <a href="#">O nás</a>
+            <a href="#">Tisk & Blogy</a>
+            <a href="#">Autorská práva</a>
+            <a href="#">Tvůrci & Partneři</a>
+            <a href="#">Reklama</a>
+            <a href="#">Vývojáři</a>
+            <a href="#">Podmínky</a>
+            <a href="#">Soukromí</a>
+            <a href="#">Bezpečnost</a>
         </div>
         <div>
-            © 2008 YouTube, LLC (Parody Portfolio Site)
+            © 2008 YouTube, LLC (Parodie Portfolio Stránky)
         </div>
     </div>
 
     <script>
-        // Simple command system
-        const searchInput = document.querySelector('.search-box input');
-        const commands = {
-            '/languages': 'Languages: JavaScript, TypeScript, Python, Go, SQL, HTML, CSS',
-            '/about': 'Full-stack developer with 5+ years experience. Passionate about clean code and open source.',
-            '/skills': 'React, Node.js, Python, AWS, Docker, PostgreSQL, MongoDB, TypeScript, Vue.js, CI/CD',
-            '/projects': 'E-Commerce Platform, Analytics Dashboard, DevTools CLI (2.5k), React Native App',
-            '/contact': 'Email: j__@outlook.cz | GitHub: github.com/loooooooser'
+        let currentLanguage = 'cs';
+
+        const translations = {
+            cs: {
+                commands: {
+                    '/jazyky': 'Jazyky: JavaScript, TypeScript, Python, Go, SQL, HTML, CSS',
+                    '/omne': 'Full-stack vývojář s 5+ lety zkušeností. Nadšenec do čistého kódu a open source.',
+                    '/dovednosti': 'React, Node.js, Python, AWS, Docker, PostgreSQL, MongoDB, TypeScript, Vue.js, CI/CD',
+                    '/projekty': 'E-Commerce platforma, Analytický dashboard, DevTools CLI (2.5k⭐), React Native aplikace',
+                    '/kontakt': 'Email: j__@outlook.cz | GitHub: github.com/loooooooser',
+                    '/translate': 'Přepínání do angličtiny...'
+                },
+                ui: {
+                    searchPlaceholder: 'Hledat',
+                    searchButton: 'Hledat',
+                    videoOverlay: 'Klikněte pro zobrazení mého portfolia',
+                    videoTitle: 'Vítejte v mém vývojářském portfoliu - Full Stack Developer',
+                    viewsText: 'zobrazení',
+                    addedText: 'Přidáno',
+                    likedText: 'se líbilo',
+                    aboutTitle: 'O mně',
+                    aboutText1: 'Ahoj! Jsem nadšený full-stack vývojář s 5+ lety zkušeností v budování škálovatelných webových aplikací. Specializuji se na moderní JavaScript frameworky, cloudovou architekturu a vytváření příjemných uživatelských zkušeností.',
+                    aboutText2: 'Miluji řešení složitých problémů elegantním kódem a spolupráci s týmy na budování produktů, které mají skutečný dopad. Když zrovna nekóduji, můžete mě najít, jak přispívám do open source nebo zkoumám nové technologie.',
+                    whatIDoTitle: 'Co dělám',
+                    whatIDoText: '• Full-stack webový vývoj (React, Node.js, TypeScript)<br>• Cloudová infrastruktura & DevOps (AWS, Docker, Kubernetes)<br>• Návrh systémů & architektura<br>• Příspěvky do open source<br>• Technické mentorství & code review',
+                    contactTitle: 'Kontaktujte mě',
+                    tagsLabel: 'Tagy:',
+                    commandsTitle: '⚡ RYCHLÉ PŘÍKAZY',
+                    cmdLabel: 'PIŠTĚ:',
+                    cmd1: '/jazyky',
+                    cmd2: '/omne',
+                    cmd3: '/dovednosti',
+                    cmd4: '/projekty',
+                    cmd5: '/kontakt',
+                    cmd6: '/translate',
+                    commandHint: 'Klikněte na vyhledávací pole výše a zadejte tyto příkazy!',
+                    channelFrom: 'Od:',
+                    channelRole: 'Softwarový inženýr',
+                    channelMember: 'Člen od 2020',
+                    subscribeBtn: 'Odebírat',
+                    techStackTitle: 'Technologie',
+                    langTitle: 'Jazyky',
+                    frontendTitle: 'Frontend',
+                    backendTitle: 'Backend',
+                    databaseTitle: 'Databáze',
+                    cloudTitle: 'Cloud & DevOps'
+                },
+                alert: 'Vítejte v mém portfoliu!\n\nToto je portfolio ve stylu YouTube z roku 2008.\n\nVyzkoušejte příkazy ve žlutém rámečku:\n• Napište /jazyky do vyhledávacího pole\n• /omne\n• /dovednosti\n• /projekty\n• /kontakt\n• /translate (přepnout do angličtiny)'
+            },
+            en: {
+                commands: {
+                    '/languages': 'Languages: JavaScript, TypeScript, Python, Go, SQL, HTML, CSS',
+                    '/about': 'Full-stack developer with 5+ years experience. Passionate about clean code and open source.',
+                    '/skills': 'React, Node.js, Python, AWS, Docker, PostgreSQL, MongoDB, TypeScript, Vue.js, CI/CD',
+                    '/projects': 'E-Commerce Platform, Analytics Dashboard, DevTools CLI (2.5k⭐), React Native App',
+                    '/contact': 'Email: j__@outlook.cz | GitHub: github.com/loooooooser',
+                    '/translate': 'Switching to Czech...'
+                },
+                ui: {
+                    searchPlaceholder: 'Search',
+                    searchButton: 'Search',
+                    videoOverlay: 'Click to view my portfolio',
+                    videoTitle: 'Welcome to My Developer Portfolio - Full Stack Developer',
+                    viewsText: 'views',
+                    addedText: 'Added',
+                    likedText: 'liked it',
+                    aboutTitle: 'About Me',
+                    aboutText1: "Hi! I'm a passionate full-stack developer with 5+ years of experience building scalable web applications. I specialize in modern JavaScript frameworks, cloud architecture, and creating delightful user experiences.",
+                    aboutText2: "I love solving complex problems with elegant code and collaborating with teams to build products that make a real impact. When I'm not coding, you can find me contributing to open source or exploring new technologies.",
+                    whatIDoTitle: 'What I Do',
+                    whatIDoText: '• Full-stack web development (React, Node.js, TypeScript)<br>• Cloud infrastructure & DevOps (AWS, Docker, Kubernetes)<br>• System design & architecture<br>• Open source contributions<br>• Technical mentoring & code reviews',
+                    contactTitle: 'Get in Touch',
+                    tagsLabel: 'Tags:',
+                    commandsTitle: '⚡ QUICK COMMANDS',
+                    cmdLabel: 'TYPE:',
+                    cmd1: '/languages',
+                    cmd2: '/about',
+                    cmd3: '/skills',
+                    cmd4: '/projects',
+                    cmd5: '/contact',
+                    cmd6: '/translate',
+                    commandHint: 'Click search box above and type these commands!',
+                    channelFrom: 'From:',
+                    channelRole: 'Software Engineer',
+                    channelMember: 'Member since 2020',
+                    subscribeBtn: 'Subscribe',
+                    techStackTitle: 'Tech Stack',
+                    langTitle: 'Languages',
+                    frontendTitle: 'Frontend',
+                    backendTitle: 'Backend',
+                    databaseTitle: 'Database',
+                    cloudTitle: 'Cloud & DevOps'
+                },
+                alert: 'Welcome to my portfolio!\n\nThis is a 2008 YouTube-styled portfolio page.\n\nTry the commands in the yellow box:\n• Type /languages in the search box\n• /about\n• /skills\n• /projects\n• /contact\n• /translate (switch to Czech)'
+            }
         };
+
+        function updateLanguage(lang) {
+            currentLanguage = lang;
+            const t = translations[lang].ui;
+
+            // Update all UI elements
+            document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+            document.getElementById('searchBtn').textContent = t.searchButton;
+            document.getElementById('videoOverlay').textContent = t.videoOverlay;
+            document.getElementById('videoTitle').textContent = t.videoTitle;
+            document.getElementById('viewsText').textContent = t.viewsText;
+            document.getElementById('addedText').textContent = t.addedText;
+            document.getElementById('likedText').textContent = t.likedText;
+            document.getElementById('aboutTitle').textContent = t.aboutTitle;
+            document.getElementById('aboutText1').textContent = t.aboutText1;
+            document.getElementById('aboutText2').textContent = t.aboutText2;
+            document.getElementById('whatIDoTitle').textContent = t.whatIDoTitle;
+            document.getElementById('whatIDoText').innerHTML = t.whatIDoText;
+            document.getElementById('contactTitle').textContent = t.contactTitle;
+            document.getElementById('tagsLabel').textContent = t.tagsLabel;
+            document.getElementById('commandsTitle').textContent = t.commandsTitle;
+            
+            // Update command labels
+            document.querySelectorAll('.command-label').forEach(el => {
+                el.textContent = t.cmdLabel;
+            });
+            
+            document.getElementById('cmd1').textContent = t.cmd1;
+            document.getElementById('cmd2').textContent = t.cmd2;
+            document.getElementById('cmd3').textContent = t.cmd3;
+            document.getElementById('cmd4').textContent = t.cmd4;
+            document.getElementById('cmd5').textContent = t.cmd5;
+            document.getElementById('cmd6').textContent = t.cmd6;
+            document.getElementById('commandHint').textContent = t.commandHint;
+            document.getElementById('channelFrom').textContent = t.channelFrom;
+            document.getElementById('channelRole').textContent = t.channelRole;
+            document.getElementById('channelMember').textContent = t.channelMember;
+            document.getElementById('subscribeBtn').textContent = t.subscribeBtn;
+            document.getElementById('techStackTitle').textContent = t.techStackTitle;
+            document.getElementById('langTitle').textContent = t.langTitle;
+            document.getElementById('frontendTitle').textContent = t.frontendTitle;
+            document.getElementById('backendTitle').textContent = t.backendTitle;
+            document.getElementById('databaseTitle').textContent = t.databaseTitle;
+            document.getElementById('cloudTitle').textContent = t.cloudTitle;
+        }
+
+        // Command system
+        const searchInput = document.getElementById('searchInput');
 
         searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 const value = searchInput.value.toLowerCase();
-                if (commands[value]) {
-                    alert('YouTube Command Result:\n\n' + commands[value]);
+                const commands = translations[currentLanguage].commands;
+
+                if (value === '/translate') {
+                    alert(commands['/translate']);
+                    const newLang = currentLanguage === 'cs' ? 'en' : 'cs';
+                    updateLanguage(newLang);
+                    searchInput.value = '';
+                } else if (commands[value]) {
+                    alert('YouTube Výsledek příkazu:\n\n' + commands[value]);
                     searchInput.value = '';
                 }
             }
@@ -654,7 +746,7 @@
 
         // Play button interaction
         document.querySelector('.play-button').addEventListener('click', () => {
-            alert('Welcome to my portfolio!\n\nThis is a 2008 YouTube-styled portfolio page.\n\nTry the commands in the yellow box:\n• Type /languages in the search box\n• Type /about\n• Type /skills\n• Type /projects\n• Type /contact');
+            alert(translations[currentLanguage].alert);
         });
     </script>
 </body>
