@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourName - Broadcast Yourself™</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arial&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff;
+            color: #333;
+        }
+
+        /* YouTube 2008 Header */
+        .youtube-header {
+            background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);
+            border-bottom: 1px solid #ccc;
+            padding: 8px 0;
+        }
+
+        .header-top {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .youtube-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            width: 120px;
+            height: 40px;
+            background: linear-gradient(to bottom, #cc0000 0%, #cc0000 60%, #fff 60%, #fff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #fff;
+            font-size: 24px;
+            letter-spacing: -1px;
+            border: 2px solid #999;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .logo-text {
+            color: #cc0000;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: -2px;
+        }
+
+        .logo-tube {
+            background: #fff;
+            color: #666;
+            padding: 0 6px;
+            border-radius: 2px;
+            border: 1px solid #999;
+        }
+
+        .tagline {
+            font-size: 11px;
+            color: #666;
+            margin-left: 10px;
+        }
+
+        .header-search {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 20px;
+        }
+
+        .search-box {
+            display: flex;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 5px 8px;
+            border: 1px solid #ccc;
+            font-size: 13px;
+            border-right: none;
+        }
+
+        .search-box button {
+            padding: 5px 15px;
+            background: linear-gradient(to bottom, #fafafa 0%, #e0e0e0 100%);
+            border: 1px solid #ccc;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .search-box button:hover {
+            background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);
+        }
+
+        .header-links {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+        }
+
+        .header-links a {
+            color: #0033cc;
+            text-decoration: none;
+        }
+
+        .header-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            background: linear-gradient(to bottom, #e8e8e8 0%, #c8c8c8 100%);
+            border-bottom: 1px solid #999;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .nav-tabs ul {
+            list-style: none;
+            display: flex;
+            gap: 2px;
+        }
+
+        .nav-tabs li {
+            padding: 8px 20px;
+            background: linear-gradient(to bottom, #d8d8d8 0%, #b8b8b8 100%);
+            border: 1px solid #999;
+            border-bottom: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            color: #333;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .nav-tabs li:hover {
+            background: linear-gradient(to bottom, #e8e8e8 0%, #c8c8c8 100%);
+        }
+
+        .nav-tabs li.active {
+            background: #fff;
+            color: #000;
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 980px;
+            margin: 20px auto;
+            padding: 0 15px;
+            display: grid;
+            grid-template-columns: 660px 300px;
+            gap: 20px;
+        }
+
+        /* Video Player Area */
+        .video-area {
+            background: #000;
+            aspect-ratio: 4/3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 3px solid #999;
+        }
+
+        .play-button {
+            width: 100px;
+            height: 100px;
+            background: rgba(204, 0, 0, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .play-button:hover {
+            background: rgba(204, 0, 0, 1);
+            transform: scale(1.1);
+        }
+
+        .play-button::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 35px solid #fff;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            margin-left: 8px;
+        }
+
+        .video-overlay {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 3px;
+        }
+
+        /* Video Info */
+        .video-info {
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .video-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .video-stats {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .rating-bar {
+            background: #e5e5e5;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+
+        .rating-fill {
+            background: linear-gradient(to right, #0c0 0%, #0c0 80%, #c00 80%, #c00 100%);
+            height: 100%;
+            width: 85%;
+        }
+
+        .video-description {
+            line-height: 1.6;
+            font-size: 13px;
+            color: #333;
+            margin: 15px 0;
+        }
+
+        .video-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: #e5e5e5;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            color: #0033cc;
+            text-decoration: none;
+            border: 1px solid #ccc;
+        }
+
+        .tag:hover {
+            background: #d5d5d5;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            font-size: 12px;
+        }
+
+        .sidebar-box {
+            background: #fff;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            padding: 12px;
+        }
+
+        .sidebar-title {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #333;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .channel-info {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .channel-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 2px solid #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .channel-details {
+            flex: 1;
+        }
+
+        .channel-name {
+            font-weight: bold;
+            font-size: 14px;
+            color: #0033cc;
+            text-decoration: none;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .channel-name:hover {
+            text-decoration: underline;
+        }
+
+        .subscribe-btn {
+            background: linear-gradient(to bottom, #ffcc00 0%, #ff9900 100%);
+            border: 1px solid #cc7700;
+            padding: 5px 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 3px;
+            margin-top: 8px;
+            display: inline-block;
+        }
+
+        .subscribe-btn:hover {
+            background: linear-gradient(to bottom, #ffdd00 0%, #ffaa00 100%);
+        }
+
+        .related-videos {
+            list-style: none;
+        }
+
+        .related-video {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .related-video:last-child {
+            border-bottom: none;
+        }
+
+        .related-thumb {
+            width: 130px;
+            height: 97px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            flex-shrink: 0;
+            border: 1px solid #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 11px;
+            text-align: center;
+            padding: 5px;
+        }
+
+        .related-info {
+            flex: 1;
+        }
+
+        .related-title {
+            font-weight: bold;
+            font-size: 12px;
+            color: #0033cc;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .related-title:hover {
+            text-decoration: underline;
+        }
+
+        .related-meta {
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* Commands Section */
+        .commands-box {
+            background: #ffffcc;
+            border: 2px solid #ffcc00;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .command-item {
+            font-family: 'Courier New', monospace;
+            margin: 8px 0;
+            padding: 5px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+        }
+
+        .command-label {
+            color: #c00;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        .youtube-footer {
+            background: #f5f5f5;
+            border-top: 1px solid #ccc;
+            margin-top: 40px;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #0033cc;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 980px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- YouTube Header -->
+    <div class="youtube-header">
+        <div class="header-top">
+            <a href="#" class="youtube-logo">
+                <div class="logo-img">
+                    <span style="color: #fff; font-size: 20px;">You</span>
+                    <span style="background: #fff; color: #cc0000; padding: 2px 6px; border-radius: 2px;">Tube</span>
+                </div>
+                <span class="tagline">Broadcast Yourself™</span>
+            </a>
+            
+            <div class="header-search">
+                <div class="search-box">
+                    <input type="text" placeholder="Search">
+                    <button>Search</button>
+                </div>
+            </div>
+            
+            <div class="header-links">
+                <a href="#">Sign Up</a>
+                <a href="#">Log In</a>
+                <a href="#">Help</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <ul>
+            <li class="active">Videos</li>
+            <li>Favorites</li>
+            <li>Playlists</li>
+            <li>Channels</li>
+            <li>Community</li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Left Column - Video Player -->
+        <div class="left-column">
+            <div class="video-area">
+                <div class="play-button"></div>
+                <div class="video-overlay">Click to view my portfolio</div>
+            </div>
+
+            <div class="video-info">
+                <h1 class="video-title">Welcome to My Developer Portfolio - Full Stack Developer</h1>
+                
+                <div class="video-stats">
+                    <div>
+                        <strong>5,234</strong> views | 
+                        Added: <strong>January 2026</strong>
+                    </div>
+                    <div>
+                        <strong>★★★★★</strong> (98% liked it)
+                    </div>
+                </div>
+
+                <div class="rating-bar">
+                    <div class="rating-fill"></div>
+                </div>
+
+                <div class="video-description">
+                    <p><strong>👋 About Me</strong></p>
+                    <p>
+                        Hi! I'm a passionate full-stack developer with 5+ years of experience building 
+                        scalable web applications. I specialize in modern JavaScript frameworks, cloud 
+                        architecture, and creating delightful user experiences.
+                    </p>
+                    <p style="margin-top: 10px;">
+                        I love solving complex problems with elegant code and collaborating with teams 
+                        to build products that make a real impact. When I'm not coding, you can find 
+                        me contributing to open source or exploring new technologies.
+                    </p>
+                    
+                    <p style="margin-top: 15px;"><strong>🎯 What I Do</strong></p>
+                    <p>
+                        • Full-stack web development (React, Node.js, TypeScript)<br>
+                        • Cloud infrastructure & DevOps (AWS, Docker, Kubernetes)<br>
+                        • System design & architecture<br>
+                        • Open source contributions<br>
+                        • Technical mentoring & code reviews
+                    </p>
+
+                    <p style="margin-top: 15px;"><strong>📫 Get in Touch</strong></p>
+                    <p>
+                        Email: your.email@example.com<br>
+                        GitHub: github.com/yourusername<br>
+                        LinkedIn: linkedin.com/in/yourusername
+                    </p>
+                </div>
+
+                <div class="video-tags">
+                    <span style="font-size: 11px; color: #666; margin-right: 5px;">Tags:</span>
+                    <a href="#" class="tag">JavaScript</a>
+                    <a href="#" class="tag">TypeScript</a>
+                    <a href="#" class="tag">React</a>
+                    <a href="#" class="tag">Node.js</a>
+                    <a href="#" class="tag">Python</a>
+                    <a href="#" class="tag">AWS</a>
+                    <a href="#" class="tag">Docker</a>
+                    <a href="#" class="tag">Full-Stack</a>
+                    <a href="#" class="tag">Web Development</a>
+                    <a href="#" class="tag">Software Engineer</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Sidebar -->
+        <div class="sidebar">
+            <!-- Commands Box -->
+            <div class="commands-box">
+                <div style="font-weight: bold; margin-bottom: 8px; color: #c00;">⚡ QUICK COMMANDS</div>
+                <div class="command-item">
+                    <span class="command-label">TYPE:</span> /languages
+                </div>
+                <div class="command-item">
+                    <span class="command-label">TYPE:</span> /about
+                </div>
+                <div class="command-item">
+                    <span class="command-label">TYPE:</span> /skills
+                </div>
+                <div class="command-item">
+                    <span class="command-label">TYPE:</span> /projects
+                </div>
+                <div class="command-item">
+                    <span class="command-label">TYPE:</span> /contact
+                </div>
+                <div style="margin-top: 10px; font-size: 10px; color: #666;">
+                    Click search box above and type these commands!
+                </div>
+            </div>
+
+            <!-- Channel Info -->
+            <div class="sidebar-box">
+                <div class="sidebar-title">From:</div>
+                <div class="channel-info">
+                    <div class="channel-avatar">YN</div>
+                    <div class="channel-details">
+                        <a href="#" class="channel-name">YourName</a>
+                        <div style="color: #666; font-size: 11px; margin: 5px 0;">
+                            Software Engineer<br>
+                            Member since 2018
+                        </div>
+                        <button class="subscribe-btn">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Videos (Projects) -->
+            <div class="sidebar-box">
+                <div class="sidebar-title">Related Videos (My Projects)</div>
+                <ul class="related-videos">
+                    <li class="related-video">
+                        <div class="related-thumb">E-Commerce Platform</div>
+                        <div class="related-info">
+                            <a href="#" class="related-title">Full-Stack E-Commerce Platform</a>
+                            <div class="related-meta">
+                                by YourName<br>
+                                2,341 views<br>
+                                ★★★★★
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <li class="related-video">
+                        <div class="related-thumb">React Dashboard</div>
+                        <div class="related-info">
+                            <a href="#" class="related-title">Real-time Analytics Dashboard</a>
+                            <div class="related-meta">
+                                by YourName<br>
+                                1,876 views<br>
+                                ★★★★☆
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <li class="related-video">
+                        <div class="related-thumb">Open Source CLI Tool</div>
+                        <div class="related-info">
+                            <a href="#" class="related-title">DevTools CLI - GitHub 2.5k⭐</a>
+                            <div class="related-meta">
+                                by YourName<br>
+                                4,523 views<br>
+                                ★★★★★
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <li class="related-video">
+                        <div class="related-thumb">Mobile App</div>
+                        <div class="related-info">
+                            <a href="#" class="related-title">React Native Task Manager</a>
+                            <div class="related-meta">
+                                by YourName<br>
+                                3,201 views<br>
+                                ★★★★★
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- More Info -->
+            <div class="sidebar-box">
+                <div class="sidebar-title">Tech Stack</div>
+                <div style="line-height: 1.8;">
+                    <strong>Languages:</strong><br>
+                    JavaScript, TypeScript, Python, Go, SQL<br><br>
+                    
+                    <strong>Frontend:</strong><br>
+                    React, Vue.js, Next.js, Tailwind CSS<br><br>
+                    
+                    <strong>Backend:</strong><br>
+                    Node.js, Express, Django, FastAPI<br><br>
+                    
+                    <strong>Database:</strong><br>
+                    PostgreSQL, MongoDB, Redis<br><br>
+                    
+                    <strong>Cloud & DevOps:</strong><br>
+                    AWS, Docker, Kubernetes, CI/CD
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="youtube-footer">
+        <div class="footer-links">
+            <a href="#">About</a>
+            <a href="#">Press & Blogs</a>
+            <a href="#">Copyright</a>
+            <a href="#">Creators & Partners</a>
+            <a href="#">Advertising</a>
+            <a href="#">Developers</a>
+            <a href="#">Terms</a>
+            <a href="#">Privacy</a>
+            <a href="#">Safety</a>
+        </div>
+        <div>
+            © 2008 YouTube, LLC (Parody Portfolio Site)
+        </div>
+    </div>
+
+    <script>
+        // Simple command system
+        const searchInput = document.querySelector('.search-box input');
+        const commands = {
+            '/languages': 'Languages: JavaScript, TypeScript, Python, Go, SQL, HTML, CSS',
+            '/about': 'Full-stack developer with 5+ years experience. Passionate about clean code and open source.',
+            '/skills': 'React, Node.js, Python, AWS, Docker, PostgreSQL, MongoDB, TypeScript, Vue.js, CI/CD',
+            '/projects': 'E-Commerce Platform, Analytics Dashboard, DevTools CLI (2.5k⭐), React Native App',
+            '/contact': 'Email: your.email@example.com | GitHub: github.com/yourusername | LinkedIn: linkedin.com/in/yourusername'
+        };
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const value = searchInput.value.toLowerCase();
+                if (commands[value]) {
+                    alert('📺 YouTube Command Result:\n\n' + commands[value]);
+                    searchInput.value = '';
+                }
+            }
+        });
+
+        // Play button interaction
+        document.querySelector('.play-button').addEventListener('click', () => {
+            alert('🎬 Welcome to my portfolio!\n\nThis is a 2008 YouTube-styled portfolio page.\n\nTry the commands in the yellow box:\n• Type /languages in the search box\n• Type /about\n• Type /skills\n• Type /projects\n• Type /contact');
+        });
+    </script>
+</body>
+</html>
