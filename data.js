@@ -2,7 +2,7 @@
 // Each turn:
 //   bot      → what the "friend" says in Ukrainian
 //   correct  → the right English meaning (one of 3 options)
-//   decoys   → two wrong-but-plausible English options
+//   decoys   → two wrongbutplausible English options
 //   reply    → what the USER types back in Ukrainian
 //   replyEn  → English meaning of the reply (shown as hint)
 
@@ -43,7 +43,7 @@ const SCRIPT = [
     replyEn: "Would four o'clock work?",
   },
   {
-    bot: "Чотири — ідеально. Де зустрінемось?",
+    bot: "Чотири ідеально. Де зустрінемось?",
     correct: "Four is perfect. Where should we meet?",
     decoys: ["Four is too late. Can we do earlier?", "Perfect. See you tomorrow then!"],
     reply: "Біля кав'ярні на розі.",
@@ -53,8 +53,8 @@ const SCRIPT = [
     bot: "Збочик, ти знову про ту кав'ярню 😂",
     correct: "You're obsessed, on about that café again 😂",
     decoys: ["Great, I love that place too!", "Which corner? I don't know it."],
-    reply: "Хайп не без причини — там кава топ!",
-    replyEn: "The hype is for a reason — the coffee is the best!",
+    reply: "Хайп не без причини там кава топ!",
+    replyEn: "The hype is for a reason the coffee is the best!",
   },
   {
     bot: "Окей окей, переконав. До зустрічі!",
