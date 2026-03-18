@@ -26,7 +26,7 @@ for (const [en, ua] of Object.entries(KEY_MAP)) {
 
 /**
  * Return the EN key needed to type a Ukrainian character.
- * Returns null for space — space is just the spacebar, no hint needed.
+ * Returns null for space - space is just the spacebar, no hint needed.
  */
 function getEnKey(ch) {
   if (!ch || ch === " ") return null;
@@ -45,7 +45,7 @@ function getKeyLabel(ch) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-// KEYBOARD ROWS (visual display — ua shown on key, en shown underneath)
+// KEYBOARD ROWS (visual display - ua shown on key, en shown underneath)
 // ─────────────────────────────────────────────────────────────────────────
 const KB_ROWS = [
   // Row 1
