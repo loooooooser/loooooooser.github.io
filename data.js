@@ -1,66 +1,506 @@
-// ── Conversation Script ──────────────────────────────────────────────────
-// Each turn:
-//   bot      → what the "friend" says in Ukrainian
-//   correct  → the right English meaning (one of 3 options)
-//   decoys   → two wrong-but-plausible English options
-//   reply    → what the USER types back in Ukrainian
-//   replyEn  → English meaning of the reply (shown as hint)
+/* ── Reset & Base ───────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-const SCRIPT = [
-  {
-    bot: "Привіт! Як ти?",
-    correct: "Hey! How are you?",
-    decoys: ["Goodbye! See you later!", "What's your name?"],
-    reply: "Привіт! Все добре, дякую!",
-    replyEn: "Hey! All good, thanks!",
-  },
-  {
-    bot: "Де ти зараз?",
-    correct: "Where are you right now?",
-    decoys: ["What time is it?", "What are you doing?"],
-    reply: "Я вдома, чіллю.",
-    replyEn: "I'm home, chilling.",
-  },
-  {
-    bot: "Норм. Що плануєш сьогодні?",
-    correct: "Cool. What are you planning today?",
-    decoys: ["Cool. What did you do yesterday?", "Nice. Where did you go?"],
-    reply: "Нічого особливого, може вийду погуляти.",
-    replyEn: "Nothing special, maybe go for a walk.",
-  },
-  {
-    bot: "О, топ ідея! Погода сьогодні гарна.",
-    correct: "Oh, great idea! The weather is nice today.",
-    decoys: ["Oh no! The weather is bad today.", "Hmm, sounds boring honestly."],
-    reply: "Точно! Може зустрінемось?",
-    replyEn: "True! Maybe we meet up?",
-  },
-  {
-    bot: "Давай! О котрій тобі зручно?",
-    correct: "Let's go! What time works for you?",
-    decoys: ["No way! I'm busy all day.", "Sure! Where should we eat?"],
-    reply: "О четвертій підійде?",
-    replyEn: "Would four o'clock work?",
-  },
-  {
-    bot: "Чотири — ідеально. Де зустрінемось?",
-    correct: "Four is perfect. Where should we meet?",
-    decoys: ["Four is too late. Can we do earlier?", "Perfect. See you tomorrow then!"],
-    reply: "Біля кав'ярні на розі.",
-    replyEn: "By the coffee shop on the corner.",
-  },
-  {
-    bot: "Збочик, ти знову про ту кав'ярню 😂",
-    correct: "You're obsessed, on about that café again 😂",
-    decoys: ["Great, I love that place too!", "Which corner? I don't know it."],
-    reply: "Хайп не без причини — там кава топ!",
-    replyEn: "The hype is for a reason — the coffee is the best!",
-  },
-  {
-    bot: "Окей окей, переконав. До зустрічі!",
-    correct: "Okay okay, you convinced me. See you there!",
-    decoys: ["Fine, but I'm paying. See you!", "Whatever, I'll be late anyway."],
-    reply: "До зустрічі! Не запізнюйся 😄",
-    replyEn: "See you! Don't be late 😄",
-  },
-];
+html, body {
+  height: 100%;
+  background: #0f1117;
+  color: #fff;
+  font-family: 'Outfit', 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+/* ── Layout ─────────────────────────────────────────── */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.02);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+}
+
+.header-left { display: flex; flex-direction: column; gap: 2px; }
+
+.logo {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #fff;
+}
+.logo-accent { color: #4CAF82; }
+
+.header-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.5px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.progress-dots {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: background 0.3s;
+}
+
+.score-label {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+}
+.score-label strong { color: #fff; }
+
+/* ── App body (chat + sidebar) ──────────────────────── */
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  height: calc(100vh - 57px);
+}
+
+/* ── Chat Area ──────────────────────────────────────── */
+.chat-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Bubbles ────────────────────────────────────────── */
+.bot-row, .user-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  animation: fadeSlideIn 0.3s ease forwards;
+}
+.user-row { justify-content: flex-end; }
+
+.avatar { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+
+.bot-bubble, .user-bubble {
+  border-radius: 4px 16px 16px 16px;
+  padding: 12px 16px;
+  max-width: 440px;
+  transition: all 0.3s;
+}
+
+.bot-bubble {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.bot-bubble.revealed {
+  background: rgba(76,175,130,0.12);
+  border-color: rgba(76,175,130,0.35);
+}
+
+.user-bubble {
+  background: rgba(76,175,130,0.15);
+  border: 1px solid rgba(76,175,130,0.3);
+  border-radius: 16px 4px 16px 16px;
+}
+
+.bubble-ua {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  letter-spacing: 0.2px;
+}
+.bubble-en {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  font-style: italic;
+}
+
+/* ── Choose Phase ───────────────────────────────────── */
+.choose-area {
+  margin-left: 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: fadeSlideIn 0.35s ease forwards;
+}
+
+.choose-label {
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.5px;
+}
+
+.options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.opt-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Outfit', 'Segoe UI', sans-serif;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+  max-width: 480px;
+  width: 100%;
+}
+
+.opt-btn:hover:not(:disabled) {
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,255,255,0.22);
+  transform: translateX(3px);
+}
+
+.opt-btn.correct {
+  background: rgba(76,175,130,0.2);
+  border-color: rgba(76,175,130,0.6);
+  color: #4CAF82;
+}
+
+.opt-btn.wrong {
+  background: rgba(255,107,107,0.15);
+  border-color: rgba(255,107,107,0.4);
+  color: #FF6B6B;
+}
+
+.opt-btn:disabled { cursor: default; }
+
+.opt-letter {
+  width: 26px;
+  height: 26px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: rgba(255,255,255,0.5);
+}
+
+.wrong-hint {
+  font-size: 13px;
+  color: #FF9E6B;
+  margin-top: 2px;
+}
+
+/* ── Type Phase ─────────────────────────────────────── */
+.type-area {
+  display: flex;
+  justify-content: flex-end;
+  animation: fadeSlideIn 0.35s ease forwards;
+}
+
+.type-prompt {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px 4px 16px 16px;
+  padding: 16px 18px;
+  max-width: 480px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.type-label {
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.5px;
+}
+
+.reply-hint {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  font-style: italic;
+}
+
+.target-word {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1.4;
+}
+
+.char { transition: color 0.1s; }
+.char.pending { color: rgba(255,255,255,0.25); }
+.char.correct-char { color: #4CAF82; }
+.char.wrong-char { color: #FF6B6B; }
+.char.cursor {
+  color: #fff;
+  border-bottom: 2px solid #FFD700;
+  animation: cursorBlink 1s step-end infinite;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { border-color: #FFD700; }
+  50% { border-color: transparent; }
+}
+
+.type-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  font-size: 18px;
+  padding: 6px 0;
+  outline: none;
+  font-family: 'Outfit', 'Segoe UI', sans-serif;
+  letter-spacing: 0.5px;
+  width: 100%;
+  caret-color: #FFD700;
+}
+
+.type-input::placeholder { color: rgba(255,255,255,0.2); font-size: 14px; }
+
+.key-hint-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.key-hint-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.3);
+  margin-right: 3px;
+}
+
+.key-chip {
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition: all 0.15s;
+  font-family: monospace;
+}
+
+.key-chip.next {
+  background: #FFD700;
+  color: #000;
+  transform: scale(1.15);
+}
+
+.key-chip.upcoming {
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.5);
+}
+
+/* ── Keyboard Sidebar ───────────────────────────────── */
+.kb-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  border-left: 1px solid rgba(255,255,255,0.07);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(0,0,0,0.2);
+  overflow-y: auto;
+}
+
+.kb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kb-title {
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.toggle-btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 4px;
+  color: rgba(255,255,255,0.35);
+  font-size: 11px;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  transition: border-color 0.15s, color 0.15s;
+}
+.toggle-btn:hover {
+  border-color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.6);
+}
+
+.kb-layout { display: flex; flex-direction: column; gap: 2px; }
+
+.kb-row {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+}
+
+.kb-key {
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  transition: all 0.12s;
+  gap: 1px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.kb-key.key-active {
+  background: #FFD700;
+  border-color: #FFD700;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255,215,0,0.4);
+}
+
+.kb-key.key-upcoming {
+  background: rgba(255,215,0,0.15);
+  border-color: rgba(255,215,0,0.4);
+}
+
+.kb-key-ua {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  color: rgba(255,255,255,0.85);
+}
+.kb-key.key-active .kb-key-ua { color: #000; }
+
+.kb-key-en {
+  font-size: 7px;
+  line-height: 1;
+  color: rgba(255,255,255,0.3);
+}
+.kb-key.key-active .kb-key-en { color: rgba(0,0,0,0.6); }
+
+.active-key-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  background: rgba(255,215,0,0.08);
+  border-radius: 8px;
+  border: 1px solid rgba(255,215,0,0.2);
+}
+
+.active-key-en {
+  font-size: 22px;
+  font-weight: 800;
+  color: #FFD700;
+  font-family: monospace;
+}
+.active-key-arrow { font-size: 16px; color: rgba(255,255,255,0.3); }
+.active-key-ua { font-size: 22px; font-weight: 800; color: #fff; }
+
+.kb-note {
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* ── Done Screen ────────────────────────────────────── */
+.done-screen {
+  position: fixed;
+  inset: 0;
+  background: #0f1117;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  padding: 40px;
+  animation: fadeSlideIn 0.4s ease forwards;
+  z-index: 100;
+}
+
+.done-emoji { font-size: 64px; }
+.done-title { font-size: 32px; font-weight: 800; }
+.done-sub { font-size: 16px; color: rgba(255,255,255,0.4); }
+
+.done-score {
+  font-size: 18px;
+  background: rgba(76,175,130,0.15);
+  border: 1px solid rgba(76,175,130,0.3);
+  border-radius: 10px;
+  padding: 10px 24px;
+  color: #4CAF82;
+  font-weight: 600;
+}
+
+.restart-btn {
+  margin-top: 8px;
+  padding: 12px 32px;
+  background: #4CAF82;
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Outfit', 'Segoe UI', sans-serif;
+  transition: background 0.15s, transform 0.15s;
+}
+.restart-btn:hover {
+  background: #5DC494;
+  transform: translateY(-2px);
+}
+
+/* ── Animations ─────────────────────────────────────── */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%     { transform: translateX(-8px); }
+  40%     { transform: translateX(8px); }
+  60%     { transform: translateX(-5px); }
+  80%     { transform: translateX(5px); }
+}
+
+.shake { animation: shake 0.45s ease; }
