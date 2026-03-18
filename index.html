@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>розмова.ua - Ukrainian Conversation Trainer</title>
+  <title>розмова.ua — Ukrainian Conversation Trainer</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-  <!-- ── HEADER ─────────────────────────────────────────── -->
+  <!-- HEADER -->
   <header id="app-header">
     <div class="header-left">
       <div class="logo">розмова<span class="logo-accent">.ua</span></div>
@@ -22,12 +22,11 @@
     </div>
   </header>
 
-  <!-- ── BODY ───────────────────────────────────────────── -->
+  <!-- MAIN BODY -->
   <div class="app-body">
 
-    <!-- Chat area -->
+    <!-- Chat column -->
     <div id="chat-area" class="chat-area">
-      <!-- messages injected by JS -->
       <div id="chat-end"></div>
     </div>
 
@@ -37,19 +36,22 @@
         <span class="kb-title">Keyboard</span>
         <button id="kb-toggle" class="toggle-btn">hide</button>
       </div>
+
       <div id="kb-body">
         <div id="kb-layout" class="kb-layout"></div>
+
         <div id="active-key-info" class="active-key-info" style="display:none;">
           <span id="active-en" class="active-key-en"></span>
           <span class="active-key-arrow">→</span>
           <span id="active-ua" class="active-key-ua"></span>
         </div>
-        <div class="kb-note">Keys light up as you type. Gold&nbsp;=&nbsp;next key.</div>
+
+        <div class="kb-note">Gold key = next letter to press</div>
       </div>
     </aside>
   </div>
 
-  <!-- ── DONE SCREEN ────────────────────────────────────── -->
+  <!-- DONE SCREEN (hidden until end) -->
   <div id="done-screen" class="done-screen" style="display:none;">
     <div class="done-emoji">🇺🇦</div>
     <div class="done-title">Розмова закінчена!</div>
@@ -58,6 +60,7 @@
     <button id="restart-btn" class="restart-btn">Start over →</button>
   </div>
 
+  <!-- Scripts in order: data → keyboard map → app logic -->
   <script src="data.js"></script>
   <script src="keyboard.js"></script>
   <script src="app.js"></script>

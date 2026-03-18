@@ -1,4 +1,7 @@
 // ── Ukrainian ↔ English keyboard map ────────────────────────────────────
+// Maps English key label → Ukrainian letter it produces.
+// Only Cyrillic letters are mapped here.
+// Spaces, punctuation (!  ' , . — 😂 😄) are typed directly — no mapping needed.
 const KEY_MAP = {
   q:"й", w:"ц", e:"у", r:"к", t:"е", y:"н", u:"г", i:"ш",
   o:"щ", p:"з", "[":"х", "]":"ї",
@@ -8,32 +11,61 @@ const KEY_MAP = {
   ",":"б", ".":"ю",
 };
 
-// Reverse: Ukrainian char → English key
+// Reverse lookup: lowercase Ukrainian char → English key
 const UA_TO_EN = {};
 Object.entries(KEY_MAP).forEach(([en, ua]) => {
   if (!UA_TO_EN[ua]) UA_TO_EN[ua] = en;
 });
 
-// Keyboard rows for visual display
+/**
+ * Return the English key needed to type a Ukrainian character.
+ * Returns null for spaces, punctuation, emoji — those are typed directly,
+ * no keyboard highlight needed.
+ */
+function getEnKey(ch) {
+  if (!ch) return null;
+  // Punctuation / emoji typed as-is on any keyboard
+  const passThrough = [" ", "!", "?", ",", ".", "'", "—", "😂", "😄", "'", "\""];
+  if (passThrough.includes(ch)) return null;
+  return UA_TO_EN[ch.toLowerCase()] || null;
+}
+
+/**
+ * Human-readable label for the "next key" hint chips.
+ */
+function getKeyLabel(ch) {
+  if (!ch) return null;
+  if (ch === " ")  return "Space";
+  if (ch === "!")  return "! (Shift+1)";
+  if (ch === "?")  return "? (Shift+/)";
+  if (ch === ",")  return ",";
+  if (ch === ".")  return ".";
+  if (ch === "'")  return "' (apostrophe)";
+  if (ch === "—")  return "— (em dash)";
+  if (ch === "😂" || ch === "😄") return ch + " (emoji)";
+  const en = UA_TO_EN[ch.toLowerCase()];
+  return en ? en.toUpperCase() : ch;
+}
+
+// ── Keyboard rows for visual display ─────────────────────────────────────
 const KB_ROWS = [
   [
-    {ua:"й",en:"q"},{ua:"ц",en:"w"},{ua:"у",en:"e"},{ua:"к",en:"r"},
-    {ua:"е",en:"t"},{ua:"н",en:"y"},{ua:"г",en:"u"},{ua:"ш",en:"i"},
-    {ua:"щ",en:"o"},{ua:"з",en:"p"},{ua:"х",en:"["},{ua:"ї",en:"]"},
+    {ua:"й",en:"Q"},{ua:"ц",en:"W"},{ua:"у",en:"E"},{ua:"к",en:"R"},
+    {ua:"е",en:"T"},{ua:"н",en:"Y"},{ua:"г",en:"U"},{ua:"ш",en:"I"},
+    {ua:"щ",en:"O"},{ua:"з",en:"P"},{ua:"х",en:"["},{ua:"ї",en:"]"},
   ],
   [
-    {ua:"ф",en:"a"},{ua:"і",en:"s"},{ua:"в",en:"d"},{ua:"а",en:"f"},
-    {ua:"п",en:"g"},{ua:"р",en:"h"},{ua:"о",en:"j"},{ua:"л",en:"k"},
-    {ua:"д",en:"l"},{ua:"ж",en:";"},{ua:"є",en:"'"},
+    {ua:"ф",en:"A"},{ua:"і",en:"S"},{ua:"в",en:"D"},{ua:"а",en:"F"},
+    {ua:"п",en:"G"},{ua:"р",en:"H"},{ua:"о",en:"J"},{ua:"л",en:"K"},
+    {ua:"д",en:"L"},{ua:"ж",en:";"},{ua:"є",en:"'"},
   ],
   [
-    {ua:"я",en:"z"},{ua:"ч",en:"x"},{ua:"с",en:"c"},{ua:"м",en:"v"},
-    {ua:"и",en:"b"},{ua:"т",en:"n"},{ua:"ь",en:"m"},{ua:"б",en:","},{ua:"ю",en:"."},
+    {ua:"я",en:"Z"},{ua:"ч",en:"X"},{ua:"с",en:"C"},{ua:"м",en:"V"},
+    {ua:"и",en:"B"},{ua:"т",en:"N"},{ua:"ь",en:"M"},{ua:"б",en:","},{ua:"ю",en:"."},
   ],
 ];
 
-// Row left-offsets (px) to simulate staggered keyboard layout
-const ROW_OFFSETS = [0, 8, 18];
+const ROW_OFFSETS = [0, 10, 22];
 
 /** Build the keyboard DOM once and attach to #kb-layout */
 function buildKeyboard() {
@@ -48,7 +80,7 @@ function buildKeyboard() {
     row.forEach(({ ua, en }) => {
       const key = document.createElement("div");
       key.className = "kb-key";
-      key.dataset.en = en;
+      key.dataset.en = en.toLowerCase(); // store lowercase for matching
 
       const uaSpan = document.createElement("span");
       uaSpan.className = "kb-key-ua";
@@ -68,42 +100,36 @@ function buildKeyboard() {
 }
 
 /**
- * Update keyboard highlights.
- * @param {string} activeEN  - the English key to highlight gold (next char to type)
- * @param {string[]} upcomingEN - next few English keys (dimly highlighted)
+ * Highlight keyboard keys.
+ * @param {string|null} activeEN   - key to glow gold
+ * @param {string[]}    upcomingEN - next few keys to dim-highlight
  */
 function updateKeyboard(activeEN, upcomingEN = []) {
-  const allKeys = document.querySelectorAll(".kb-key");
-  allKeys.forEach(k => {
-    k.classList.remove("key-active", "key-upcoming");
-  });
+  document.querySelectorAll(".kb-key").forEach(k =>
+    k.classList.remove("key-active", "key-upcoming")
+  );
 
   if (activeEN) {
-    const activeEl = document.querySelector(`.kb-key[data-en="${CSS.escape(activeEN)}"]`);
-    if (activeEl) activeEl.classList.add("key-active");
+    const el = document.querySelector(`.kb-key[data-en="${activeEN.toLowerCase()}"]`);
+    if (el) el.classList.add("key-active");
   }
 
   upcomingEN.forEach(en => {
-    const el = document.querySelector(`.kb-key[data-en="${CSS.escape(en)}"]`);
+    if (!en) return;
+    const el = document.querySelector(`.kb-key[data-en="${en.toLowerCase()}"]`);
     if (el && !el.classList.contains("key-active")) el.classList.add("key-upcoming");
   });
 
-  // Active key info panel
+  // Info panel
   const infoBox = document.getElementById("active-key-info");
   const enLabel = document.getElementById("active-en");
   const uaLabel = document.getElementById("active-ua");
 
-  if (activeEN) {
-    const uaChar = KEY_MAP[activeEN] || activeEN;
+  if (activeEN && infoBox) {
     enLabel.textContent = activeEN.toUpperCase();
-    uaLabel.textContent = uaChar;
+    uaLabel.textContent = KEY_MAP[activeEN.toLowerCase()] || activeEN;
     infoBox.style.display = "flex";
-  } else {
+  } else if (infoBox) {
     infoBox.style.display = "none";
   }
-}
-
-/** Get the English key for a Ukrainian character */
-function getEnKey(uaChar) {
-  return UA_TO_EN[uaChar] || null;
 }

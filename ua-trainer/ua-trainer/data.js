@@ -1,10 +1,9 @@
 // ── Conversation Script ──────────────────────────────────────────────────
-// Each turn:
-//   bot      → what the "friend" says in Ukrainian
-//   correct  → the right English meaning (one of 3 options)
-//   decoys   → two wrong-but-plausible English options
-//   reply    → what the USER types back in Ukrainian
-//   replyEn  → English meaning of the reply (shown as hint)
+// bot      → what the "friend" says in Ukrainian
+// correct  → the right English meaning (one of 3 options shown)
+// decoys   → two wrong-but-plausible English meanings
+// reply    → what the USER types in Ukrainian
+// replyEn  → English hint shown above the typing box
 
 const SCRIPT = [
   {
