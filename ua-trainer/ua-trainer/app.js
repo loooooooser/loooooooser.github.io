@@ -185,7 +185,7 @@ function onChoice(opt, btn, area, grid, turn) {
     if (!area.querySelector(".wrong-hint")) {
       var hint = document.createElement("div");
       hint.className = "wrong-hint";
-      hint.textContent = "Not quite — try again!";
+      hint.textContent = "Not quite - try again!";
       area.appendChild(hint);
     }
     setTimeout(function() {
@@ -214,7 +214,7 @@ function renderTypePhase(turn) {
 
   var lbl = document.createElement("div");
   lbl.className = "type-label";
-  lbl.textContent = "Your turn — type your reply:";
+  lbl.textContent = "Your turn - type your reply:";
   prompt.appendChild(lbl);
 
   var hint = document.createElement("div");
