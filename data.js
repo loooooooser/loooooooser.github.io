@@ -1,65 +1,63 @@
 // ── Conversation Script ──────────────────────────────────────────────────
-// bot      → what the "friend" says in Ukrainian
-// correct  → the right English meaning (one of 3 options shown)
-// decoys   → two wrong-but-plausible English meanings
-// reply    → what the USER types in Ukrainian
-// replyEn  → English hint shown above the typing box
+// All replies use only standard Ukrainian letters and spaces.
+// No apostrophes, em-dashes, exclamation marks, emoji, or punctuation
+// that requires special key combos.
 
 const SCRIPT = [
   {
     bot: "Привіт! Як ти?",
     correct: "Hey! How are you?",
-    decoys: ["Goodbye! See you later!", "What's your name?"],
-    reply: "Привіт! Все добре, дякую!",
-    replyEn: "Hey! All good, thanks!",
+    decoys: ["Goodbye! See you later!", "What is your name?"],
+    reply: "Привіт все добре дякую",
+    replyEn: "Hey all good thanks",
   },
   {
     bot: "Де ти зараз?",
     correct: "Where are you right now?",
     decoys: ["What time is it?", "What are you doing?"],
-    reply: "Я вдома, чіллю.",
-    replyEn: "I'm home, chilling.",
+    reply: "Я вдома чіллю",
+    replyEn: "I am home chilling",
   },
   {
     bot: "Норм. Що плануєш сьогодні?",
     correct: "Cool. What are you planning today?",
     decoys: ["Cool. What did you do yesterday?", "Nice. Where did you go?"],
-    reply: "Нічого особливого, може вийду погуляти.",
-    replyEn: "Nothing special, maybe go for a walk.",
+    reply: "Нічого особливого може вийду погуляти",
+    replyEn: "Nothing special maybe go for a walk",
   },
   {
-    bot: "О, топ ідея! Погода сьогодні гарна.",
-    correct: "Oh, great idea! The weather is nice today.",
-    decoys: ["Oh no! The weather is bad today.", "Hmm, sounds boring honestly."],
-    reply: "Точно! Може зустрінемось?",
-    replyEn: "True! Maybe we meet up?",
+    bot: "Погода сьогодні гарна. Топ день для прогулянки.",
+    correct: "The weather is nice today. Perfect day for a walk.",
+    decoys: ["The weather is bad today. Stay inside.", "I am busy today. Maybe tomorrow."],
+    reply: "Точно може зустрінемось",
+    replyEn: "True maybe we meet up",
   },
   {
-    bot: "Давай! О котрій тобі зручно?",
-    correct: "Let's go! What time works for you?",
-    decoys: ["No way! I'm busy all day.", "Sure! Where should we eat?"],
-    reply: "О четвертій підійде?",
-    replyEn: "Would four o'clock work?",
+    bot: "Давай. О котрій тобі зручно?",
+    correct: "Let's go. What time works for you?",
+    decoys: ["No way. I am busy all day.", "Sure. Where should we eat?"],
+    reply: "О четвертій підійде",
+    replyEn: "Would four o clock work",
   },
   {
-    bot: "Чотири — ідеально. Де зустрінемось?",
+    bot: "Чотири ідеально. Де зустрінемось?",
     correct: "Four is perfect. Where should we meet?",
-    decoys: ["Four is too late. Can we do earlier?", "Perfect. See you tomorrow then!"],
-    reply: "Біля кав'ярні на розі.",
-    replyEn: "By the coffee shop on the corner.",
+    decoys: ["Four is too late. Can we do earlier?", "Perfect. See you tomorrow then."],
+    reply: "Біля кафе на розі",
+    replyEn: "By the cafe on the corner",
   },
   {
-    bot: "Збочик, ти знову про ту кав'ярню 😂",
-    correct: "You're obsessed, on about that café again 😂",
-    decoys: ["Great, I love that place too!", "Which corner? I don't know it."],
-    reply: "Хайп не без причини — там кава топ!",
-    replyEn: "The hype is for a reason — the coffee is the best!",
+    bot: "Ти знову про те кафе.",
+    correct: "You are on about that cafe again.",
+    decoys: ["I love that place too.", "Which corner? I do not know it."],
+    reply: "Там кава топ повірь мені",
+    replyEn: "The coffee there is the best trust me",
   },
   {
-    bot: "Окей окей, переконав. До зустрічі!",
-    correct: "Okay okay, you convinced me. See you there!",
-    decoys: ["Fine, but I'm paying. See you!", "Whatever, I'll be late anyway."],
-    reply: "До зустрічі! Не запізнюйся 😄",
-    replyEn: "See you! Don't be late 😄",
+    bot: "Окей переконав. До зустрічі.",
+    correct: "Okay you convinced me. See you there.",
+    decoys: ["Fine but I am paying. See you.", "Whatever I will be late anyway."],
+    reply: "До зустрічі не запізнюйся",
+    replyEn: "See you do not be late",
   },
 ];

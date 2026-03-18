@@ -1,42 +1,44 @@
-// ── State ────────────────────────────────────────────────────────────────
-const state = {
-  turnIdx: 0,
-  score: 0,
-  chosen: null,   // null | "correct" | "wrong"
-  typed: "",
-  kbVisible: true,
+// ── State ─────────────────────────────────────────────────────────────────
+var state = {
+  turnIdx:   0,
+  score:     0,
+  chosen:    null,   // null | "correct" | "wrong"
+  typed:     "",
+  kbVisible: true
 };
 
-// ── DOM refs ─────────────────────────────────────────────────────────────
-const chatArea     = document.getElementById("chat-area");
-const chatEnd      = document.getElementById("chat-end");
-const scoreVal     = document.getElementById("score-val");
-const progressDots = document.getElementById("progress-dots");
-const doneScreen   = document.getElementById("done-screen");
-const doneScoreEl  = document.getElementById("done-score");
-const restartBtn   = document.getElementById("restart-btn");
-const kbToggleBtn  = document.getElementById("kb-toggle");
-const kbBody       = document.getElementById("kb-body");
+// ── DOM refs ──────────────────────────────────────────────────────────────
+var chatArea     = document.getElementById("chat-area");
+var chatEnd      = document.getElementById("chat-end");
+var scoreVal     = document.getElementById("score-val");
+var progressDots = document.getElementById("progress-dots");
+var doneScreen   = document.getElementById("done-screen");
+var doneScoreEl  = document.getElementById("done-score");
+var restartBtn   = document.getElementById("restart-btn");
+var kbToggleBtn  = document.getElementById("kb-toggle");
+var kbBody       = document.getElementById("kb-body");
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
   }
   return a;
 }
 
 function scrollToEnd() {
-  setTimeout(() => chatEnd.scrollIntoView({ behavior: "smooth" }), 60);
+  setTimeout(function() {
+    chatEnd.scrollIntoView({ behavior: "smooth" });
+  }, 60);
 }
 
 // ── Progress dots ─────────────────────────────────────────────────────────
 function renderProgress() {
   progressDots.innerHTML = "";
-  SCRIPT.forEach((_, i) => {
-    const dot = document.createElement("div");
+  SCRIPT.forEach(function(_, i) {
+    var dot = document.createElement("div");
     dot.className = "progress-dot";
     dot.style.background =
       i < state.turnIdx   ? "#4CAF82" :
@@ -47,23 +49,23 @@ function renderProgress() {
   scoreVal.textContent = state.score;
 }
 
-// ── History bubble (frozen past messages) ────────────────────────────────
+// ── History bubbles (frozen past messages) ────────────────────────────────
 function appendHistoryBubble(who, ua, en) {
-  const row = document.createElement("div");
+  var row = document.createElement("div");
   row.className = who === "bot" ? "bot-row" : "user-row";
 
-  const avatar = document.createElement("div");
+  var avatar = document.createElement("div");
   avatar.className = "avatar";
   avatar.textContent = who === "bot" ? "🤖" : "👤";
 
-  const bubble = document.createElement("div");
+  var bubble = document.createElement("div");
   bubble.className = who === "bot" ? "bot-bubble revealed" : "user-bubble";
 
-  const uaEl = document.createElement("div");
+  var uaEl = document.createElement("div");
   uaEl.className = "bubble-ua";
   uaEl.textContent = ua;
 
-  const enEl = document.createElement("div");
+  var enEl = document.createElement("div");
   enEl.className = "bubble-en";
   enEl.textContent = en;
 
@@ -77,24 +79,24 @@ function appendHistoryBubble(who, ua, en) {
   scrollToEnd();
 }
 
-// ── Live bot bubble (no translation yet) ─────────────────────────────────
-let currentBotRow = null;
+// ── Live bot bubble ───────────────────────────────────────────────────────
+var currentBotRow = null;
 
 function renderBotBubble(turn) {
   if (currentBotRow) currentBotRow.remove();
 
-  const row = document.createElement("div");
+  var row = document.createElement("div");
   row.className = "bot-row";
 
-  const avatar = document.createElement("div");
+  var avatar = document.createElement("div");
   avatar.className = "avatar";
   avatar.textContent = "🤖";
 
-  const bubble = document.createElement("div");
+  var bubble = document.createElement("div");
   bubble.className = "bot-bubble";
   bubble.id = "current-bot-bubble";
 
-  const uaEl = document.createElement("div");
+  var uaEl = document.createElement("div");
   uaEl.className = "bubble-ua";
   uaEl.textContent = turn.bot;
   bubble.appendChild(uaEl);
@@ -107,50 +109,52 @@ function renderBotBubble(turn) {
 }
 
 function revealBotBubble(correctText) {
-  const bubble = document.getElementById("current-bot-bubble");
+  var bubble = document.getElementById("current-bot-bubble");
   if (!bubble) return;
   bubble.classList.add("revealed");
-  const enEl = document.createElement("div");
+  var enEl = document.createElement("div");
   enEl.className = "bubble-en";
   enEl.textContent = correctText;
   bubble.appendChild(enEl);
 }
 
 // ── Choose phase ──────────────────────────────────────────────────────────
-let chooseAreaEl = null;
+var chooseAreaEl = null;
 
 function renderChoosePhase(turn) {
   if (chooseAreaEl) chooseAreaEl.remove();
   state.chosen = null;
 
-  const shuffled = shuffle([
+  var shuffled = shuffle([
     { text: turn.correct, right: true },
     { text: turn.decoys[0], right: false },
-    { text: turn.decoys[1], right: false },
+    { text: turn.decoys[1], right: false }
   ]);
 
-  const area = document.createElement("div");
+  var area = document.createElement("div");
   area.className = "choose-area";
 
-  const label = document.createElement("div");
+  var label = document.createElement("div");
   label.className = "choose-label";
   label.textContent = "What does this mean?";
   area.appendChild(label);
 
-  const grid = document.createElement("div");
+  var grid = document.createElement("div");
   grid.className = "options-grid";
 
-  shuffled.forEach((opt, i) => {
-    const btn = document.createElement("button");
+  shuffled.forEach(function(opt, i) {
+    var btn = document.createElement("button");
     btn.className = "opt-btn";
 
-    const letter = document.createElement("span");
+    var letter = document.createElement("span");
     letter.className = "opt-letter";
-    letter.textContent = ["A", "B", "C"][i];
+    letter.textContent = ["A","B","C"][i];
     btn.appendChild(letter);
     btn.appendChild(document.createTextNode(opt.text));
 
-    btn.addEventListener("click", () => onChoice(opt, btn, area, grid, turn));
+    btn.addEventListener("click", function() {
+      onChoice(opt, btn, area, grid, turn);
+    });
     grid.appendChild(btn);
   });
 
@@ -168,9 +172,9 @@ function onChoice(opt, btn, area, grid, turn) {
     state.score++;
     renderProgress();
     btn.classList.add("correct");
-    grid.querySelectorAll(".opt-btn").forEach(b => (b.disabled = true));
+    grid.querySelectorAll(".opt-btn").forEach(function(b) { b.disabled = true; });
     revealBotBubble(turn.correct);
-    setTimeout(() => {
+    setTimeout(function() {
       area.remove();
       chooseAreaEl = null;
       renderTypePhase(turn);
@@ -178,17 +182,13 @@ function onChoice(opt, btn, area, grid, turn) {
   } else {
     btn.classList.add("wrong");
     area.classList.add("shake");
-
-    // Remove existing wrong-hint so we don't duplicate
-    const existing = area.querySelector(".wrong-hint");
-    if (!existing) {
-      const hint = document.createElement("div");
+    if (!area.querySelector(".wrong-hint")) {
+      var hint = document.createElement("div");
       hint.className = "wrong-hint";
-      hint.textContent = "Not quite — try again! 🙂";
+      hint.textContent = "Not quite — try again!";
       area.appendChild(hint);
     }
-
-    setTimeout(() => {
+    setTimeout(function() {
       area.classList.remove("shake");
       btn.classList.remove("wrong");
       btn.disabled = false;
@@ -197,41 +197,37 @@ function onChoice(opt, btn, area, grid, turn) {
 }
 
 // ── Type phase ────────────────────────────────────────────────────────────
-let typeAreaEl = null;
+var typeAreaEl = null;
 
 function renderTypePhase(turn) {
   if (typeAreaEl) typeAreaEl.remove();
   state.typed = "";
 
-  const area = document.createElement("div");
+  var area = document.createElement("div");
   area.className = "type-area";
 
-  const userRow = document.createElement("div");
+  var userRow = document.createElement("div");
   userRow.className = "user-row";
 
-  const prompt = document.createElement("div");
+  var prompt = document.createElement("div");
   prompt.className = "type-prompt";
 
-  // Label
-  const lbl = document.createElement("div");
+  var lbl = document.createElement("div");
   lbl.className = "type-label";
   lbl.textContent = "Your turn — type your reply:";
   prompt.appendChild(lbl);
 
-  // English hint
-  const hint = document.createElement("div");
+  var hint = document.createElement("div");
   hint.className = "reply-hint";
   hint.textContent = turn.replyEn;
   prompt.appendChild(hint);
 
-  // Target character display
-  const targetEl = document.createElement("div");
+  var targetEl = document.createElement("div");
   targetEl.className = "target-word";
   targetEl.id = "target-word";
   prompt.appendChild(targetEl);
 
-  // Input
-  const input = document.createElement("input");
+  var input = document.createElement("input");
   input.type = "text";
   input.className = "type-input";
   input.id = "type-input";
@@ -242,13 +238,12 @@ function renderTypePhase(turn) {
   input.setAttribute("spellcheck", "false");
   prompt.appendChild(input);
 
-  // Key hint chips
-  const keyRow = document.createElement("div");
+  var keyRow = document.createElement("div");
   keyRow.className = "key-hint-row";
   keyRow.id = "key-hint-row";
   prompt.appendChild(keyRow);
 
-  const avatar = document.createElement("div");
+  var avatar = document.createElement("div");
   avatar.className = "avatar";
   avatar.textContent = "👤";
 
@@ -258,27 +253,29 @@ function renderTypePhase(turn) {
   chatArea.insertBefore(area, chatEnd);
   typeAreaEl = area;
 
-  // Wire up typing
-  input.addEventListener("input", () => onTyping(turn, input));
+  input.addEventListener("input", function() {
+    onTyping(turn, input);
+  });
 
-  // Initial render
   renderTargetWord(turn.reply, "");
   updateKeyboardForPos(turn.reply, "");
 
-  setTimeout(() => { input.focus(); scrollToEnd(); }, 60);
+  setTimeout(function() {
+    input.focus();
+    scrollToEnd();
+  }, 60);
 }
 
-// Render the coloured target word character by character
+// Render coloured target word char by char
 function renderTargetWord(target, typed) {
-  const el = document.getElementById("target-word");
+  var el = document.getElementById("target-word");
   if (!el) return;
   el.innerHTML = "";
 
-  Array.from(target).forEach((ch, i) => {
-    const span = document.createElement("span");
+  target.split("").forEach(function(ch, i) {
+    var span = document.createElement("span");
     span.className = "char";
-
-    // Use non-breaking space so spaces are visible
+    // Use non-breaking space so spaces show as a visible gap
     span.textContent = ch === " " ? "\u00A0" : ch;
 
     if (i < typed.length) {
@@ -292,67 +289,61 @@ function renderTargetWord(target, typed) {
   });
 }
 
-// Render the "next keys" hint chips below the input
+// Render next-key hint chips
 function renderKeyHints(target, typed) {
-  const row = document.getElementById("key-hint-row");
+  var row = document.getElementById("key-hint-row");
   if (!row) return;
   row.innerHTML = "";
 
-  // Show next 5 characters
-  const upcoming = Array.from(target.slice(typed.length, typed.length + 5));
+  var upcoming = target.slice(typed.length, typed.length + 5).split("");
   if (upcoming.length === 0) return;
 
-  const lbl = document.createElement("span");
+  var lbl = document.createElement("span");
   lbl.className = "key-hint-label";
   lbl.textContent = "Next:";
   row.appendChild(lbl);
 
-  upcoming.forEach((ch, i) => {
-    const label = getKeyLabel(ch);
+  upcoming.forEach(function(ch, i) {
+    var label = getKeyLabel(ch);
     if (!label) return;
-
-    const chip = document.createElement("span");
+    var chip = document.createElement("span");
     chip.className = "key-chip " + (i === 0 ? "next" : "upcoming");
     chip.textContent = label;
     row.appendChild(chip);
   });
 }
 
-// Update keyboard highlights and key info panel for current position
+// Update keyboard highlights for current typing position
 function updateKeyboardForPos(target, typed) {
-  const nextChar = typed.length < target.length ? target[typed.length] : null;
-  const activeEN = nextChar ? getEnKey(nextChar) : null;
+  var nextChar = typed.length < target.length ? target[typed.length] : null;
+  var activeEN = nextChar ? getEnKey(nextChar) : null;
 
-  // Upcoming Cyrillic keys (skip punctuation/space — they have no EN key)
-  const upcomingEN = Array.from(target.slice(typed.length + 1, typed.length + 5))
-    .map(c => getEnKey(c))
-    .filter(Boolean);
+  // Get upcoming Cyrillic keys (skip spaces)
+  var upcomingEN = target.slice(typed.length + 1, typed.length + 5)
+    .split("")
+    .map(function(c) { return getEnKey(c); })
+    .filter(function(k) { return !!k; });
 
   updateKeyboard(activeEN, upcomingEN);
   renderKeyHints(target, typed);
 }
 
-// Handle each keystroke in the input
+// Handle each keystroke
 function onTyping(turn, input) {
-  const val = input.value;
+  var val = input.value;
   state.typed = val;
 
   renderTargetWord(turn.reply, val);
   updateKeyboardForPos(turn.reply, val);
 
-  // Complete!
   if (val === turn.reply) {
-    setTimeout(() => {
-      // Freeze user reply as a history bubble
+    setTimeout(function() {
       appendHistoryBubble("user", turn.reply, turn.replyEn);
-
-      // Remove live elements
       if (typeAreaEl)    { typeAreaEl.remove();    typeAreaEl = null; }
       if (currentBotRow) { currentBotRow.remove(); currentBotRow = null; }
-
       updateKeyboard(null, []);
 
-      const nextIdx = state.turnIdx + 1;
+      var nextIdx = state.turnIdx + 1;
       if (nextIdx < SCRIPT.length) {
         state.turnIdx = nextIdx;
         renderProgress();
@@ -366,14 +357,14 @@ function onTyping(turn, input) {
 
 // ── Turn flow ─────────────────────────────────────────────────────────────
 function startTurn() {
-  const turn = SCRIPT[state.turnIdx];
+  var turn = SCRIPT[state.turnIdx];
   renderBotBubble(turn);
-  setTimeout(() => renderChoosePhase(turn), 280);
+  setTimeout(function() { renderChoosePhase(turn); }, 280);
 }
 
 // ── Done screen ───────────────────────────────────────────────────────────
 function showDoneScreen() {
-  doneScoreEl.textContent = `${state.score} / ${SCRIPT.length} correct first tries`;
+  doneScoreEl.textContent = state.score + " / " + SCRIPT.length + " correct first tries";
   doneScreen.style.display = "flex";
 }
 
@@ -384,7 +375,6 @@ function restartApp() {
   state.chosen  = null;
   state.typed   = "";
 
-  // Wipe chat (leave sentinel)
   while (chatArea.firstChild && chatArea.firstChild.id !== "chat-end") {
     chatArea.removeChild(chatArea.firstChild);
   }
@@ -400,7 +390,7 @@ function restartApp() {
 }
 
 // ── Sidebar toggle ────────────────────────────────────────────────────────
-kbToggleBtn.addEventListener("click", () => {
+kbToggleBtn.addEventListener("click", function() {
   state.kbVisible = !state.kbVisible;
   kbBody.style.display    = state.kbVisible ? "" : "none";
   kbToggleBtn.textContent = state.kbVisible ? "hide" : "show";
